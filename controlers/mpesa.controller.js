@@ -39,7 +39,7 @@ const stk = async (req, res) => {
                 PartyA: `254${phone}`,
                 PartyB: shortcode,
                 PhoneNumber: `254${phone}`,
-                CallBackURL: `${process.env.BASE_URL}callback/`,
+                CallBackURL: `https://express-stk-push.vercel.app/callback/`,
                 AccountReference: `254${phone}`,
                 TransactionDesc: "Test for app jay",
             },
