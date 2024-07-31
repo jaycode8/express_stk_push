@@ -1,6 +1,5 @@
 const axios = require("axios");
 const PaymentModel = require('../models/payments.model');
-const generateToken = require("../utils/tk");
 
 const home = (req, res) => {
     const now = new Date();
@@ -12,7 +11,7 @@ const home = (req, res) => {
 const stk = async (req, res) => {
     const phone = req.body.phone.substring(1);
     const amount = req.body.amount;
-    // code for generating timestamp
+
     const date = new Date();
     const timestamp = date.getFullYear() +
         ("0" + (date.getMonth() + 1)).slice(-2) +
@@ -24,7 +23,6 @@ const stk = async (req, res) => {
     const shortcode = process.env.MPESA_PAYBILL;
     const passkey = process.env.MPESA_PASSKEY;
 
-    //code to generate the base64 password
     const password = new Buffer.from(shortcode + passkey + timestamp).toString("base64");
     
     await axios
@@ -39,7 +37,7 @@ const stk = async (req, res) => {
                 PartyA: `254${phone}`,
                 PartyB: shortcode,
                 PhoneNumber: `254${phone}`,
-                CallBackURL: `https://express-stk-push.vercel.app/callback/`,
+                CallBackURL: `https://f85d-2c0f-fe38-220b-f25-5266-41b3-ea61-d31a.ngrok-free.app/callback/`,
                 AccountReference: `254${phone}`,
                 TransactionDesc: "Test for app jay",
             },
@@ -59,27 +57,7 @@ const stk = async (req, res) => {
         });
 }
 
-const callbacks2 = async (req, res) => {
-    // const callbackData = req.body;
-    // console.log(callbackData.Body.stkCallback.CallbackMetadata);
-    // console.log(callbackData)
-
-    let payment = new PaymentModel();
-    payment.phone = "254111482180";
-    payment.amount = 10;
-    payment.trnx_id = "SGM319EPWO";
-    payment
-        .save()
-        .then((data) => {
-            console.log({ msg: "successfully saved record in db", data });
-        })
-        .catch((err) => {
-            console.log(err.message);
-        });
-}
-
 const callbacks = async (req, res) => {
-    // console.log("hey");
     const callbackData = req.body;
     if (!callbackData.Body.stkCallback.CallbackMetadata) {
         console.log(callbackData.Body);

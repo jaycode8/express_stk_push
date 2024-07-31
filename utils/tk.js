@@ -9,7 +9,6 @@ const generateToken = async (req, res, next) => {
             authorization: `Basic ${auth}`
         }
     }).then((response) => {
-        // console.log(response.data.access_token);
         token = response.data.access_token;
         next();
     }).catch((err) => {
